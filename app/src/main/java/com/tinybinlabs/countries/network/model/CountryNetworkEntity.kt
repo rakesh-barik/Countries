@@ -2,23 +2,29 @@ package com.tinybinlabs.countries.network.model
 
 import com.google.gson.annotations.SerializedName
 
-class CountryNetworkEntity (
+/**
+ * Entity class for the network response.
+ * The variables are nullable here as we might receive any of these
+ * values as NULL.
+ * */
+class CountryNetworkEntity(
 
+    var id: Int? = null,
     @SerializedName("name")
-    var name:String,
+    var name: String? = null,
     @SerializedName("capital")
-    var capital: String,
+    var capital: String? = null,
     @SerializedName("region")
-    var region: String,
+    var region: String? = null,
     @SerializedName("alpha2Code")
-    var alpha2Code: String,
+    var alpha2Code: String? = null,
     @SerializedName("alpha3Code")
-    var alpha3Code: String,
+    var alpha3Code: String? = null,
     @SerializedName("altSpellings")
-    var altSpellings: List<String>,
+    var altSpellings: List<String>? = null,
     @SerializedName("callingCodes")
-    var callingCodes: List<String>,
+    var callingCodes: List<String>? = null,
     @SerializedName("topLevelDomain")
-    var topLevelDomain: List<String>
+    var topLevelDomain: List<String>? = null
 
 )
