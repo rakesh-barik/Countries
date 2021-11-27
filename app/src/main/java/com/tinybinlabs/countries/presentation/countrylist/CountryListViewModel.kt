@@ -26,6 +26,9 @@ constructor(
 
     init {
         viewModelScope.launch {
+            _state.value = state.value.copy(
+                loading = true
+            )
             getCountries(token)
         }
     }
@@ -34,7 +37,8 @@ constructor(
         Log.d("Countries", "getCountries called in view model.")
         val result: List<Country> = repository.getCountries(token)
         _state.value = state.value.copy(
-            countries = result
+            countries = result,
+            loading = false
         )
     }
 

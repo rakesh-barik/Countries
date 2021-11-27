@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.tinybinlabs.countries.domain.Country
+import com.tinybinlabs.countries.presentation.components.LoadingIndicator
 
 @Composable
 fun CountryListScreen(
@@ -36,6 +37,7 @@ fun CountryListScreen(
         },
 
         ) {
+        LoadingIndicator(state.loading)
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(state.countries) { country: Country ->
                 Row(
@@ -51,6 +53,5 @@ fun CountryListScreen(
                 }
             }
         }
-
     }
 }
