@@ -18,15 +18,20 @@ class CountryRepositoryImpl(
 
     override suspend fun getCountries(token: String?): Flow<List<Country>> = flow {
         Log.d("Countries", "getCountries called in repository. token : $token")
-        token?.let {
-            val result = countryService.getAllCountries(token)
-            for (country in result) {
-                dao.insertCountry(mapper.mapToDbEntity(country))
+        try {
+            token?.let {
+                val result = countryService.getAllCountries(token)
+                for (country in result) {
+                    dao.insertCountry(mapper.mapToDbEntity(country))
+                }
             }
+            Log.d("Countries", "getCountries from Db")
+            val cachedCountries = dao.getCountries()
+            emit(dbMapper.fromEntityList(cachedCountries))
+        } catch (e: Exception) {
+            emit(emptyList<Country>())
         }
-        Log.d("Countries", "getCountries from Db")
-        val cachedCountries = dao.getCountries()
-        emit(dbMapper.fromEntityList(cachedCountries))
+
     }
 
     override suspend fun getCountryById(id: Int): Country? {
