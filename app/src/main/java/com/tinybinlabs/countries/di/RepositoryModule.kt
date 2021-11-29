@@ -1,5 +1,7 @@
 package com.tinybinlabs.countries.di
 
+import com.tinybinlabs.countries.cache.CountryDao
+import com.tinybinlabs.countries.cache.util.CountryDbMapper
 import com.tinybinlabs.countries.network.CountryService
 import com.tinybinlabs.countries.network.util.CountryNetworkMapper
 import com.tinybinlabs.countries.repository.CountryRepository
@@ -18,8 +20,10 @@ object RepositoryModule {
     @Provides
     fun provideRepository(
         countryService: CountryService,
-        mapper: CountryNetworkMapper
+        mapper: CountryNetworkMapper,
+        countryDao: CountryDao,
+        dbMapper: CountryDbMapper
     ): CountryRepository {
-        return CountryRepositoryImpl(countryService, mapper)
+        return CountryRepositoryImpl(countryService, mapper, countryDao, dbMapper)
     }
 }
