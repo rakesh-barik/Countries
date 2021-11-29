@@ -44,6 +44,6 @@ object NetworkModule {
     @Provides
     @Named("access_key")
     fun provideAccessToken(): String {
-        return "3a8117c25921493e4717a68346c00375"
+        return "7a0396ac204cd3532b6aae08dfaf1d72"
     }
 }
