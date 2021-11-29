@@ -2,6 +2,8 @@ package com.tinybinlabs.countries.presentation.country
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -54,7 +56,12 @@ fun CountryDetailScreen(
             elevation = 4.dp
 
         ) {
-            Column(modifier = Modifier.wrapContentSize()) {
+            Column(
+                modifier = Modifier
+                    .wrapContentSize()
+                    .verticalScroll(rememberScrollState()),
+
+            ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
