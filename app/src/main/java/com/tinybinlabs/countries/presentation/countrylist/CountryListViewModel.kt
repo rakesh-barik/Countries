@@ -36,6 +36,9 @@ constructor(
                 getCountries(token)
             } else {
                 getCountries(null)
+                _state.value = state.value.copy(
+                    showError = Pair(true, "No Network Connection")
+                )
             }
 
 
@@ -49,10 +52,17 @@ constructor(
         )
         repository.getCountries(token)
             .onEach {
-                _state.value = state.value.copy(
-                    countries = it,
-                    loading = false
-                )
+                if (it.isEmpty()) {
+                    _state.value = state.value.copy(
+                        showError = Pair(true, "Error fetching Details"),
+                        loading = false
+                    )
+                } else {
+                    _state.value = state.value.copy(
+                        countries = it,
+                        loading = false
+                    )
+                }
             }
             .launchIn(viewModelScope)
     }

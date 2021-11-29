@@ -13,6 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.tinybinlabs.countries.domain.Country
 import com.tinybinlabs.countries.presentation.Screen
+import com.tinybinlabs.countries.presentation.components.ConnectivityMessageView
 import com.tinybinlabs.countries.presentation.components.LoadingIndicator
 
 @Composable
@@ -41,28 +42,35 @@ fun CountryListScreen(
         },
 
         ) {
-        LoadingIndicator(state.loading)
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(state.countries) { country: Country ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            navController.navigate(Screen.DetailScreen.route + "?countryId=${country.id}")
+        Box(modifier = Modifier.fillMaxSize()){
+            Column(modifier = Modifier.fillMaxSize()) {
+                LoadingIndicator(state.loading)
+                LazyColumn(modifier = Modifier.weight(1f)) {
+                    items(state.countries) { country: Country ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    navController.navigate(Screen.DetailScreen.route + "?countryId=${country.id}")
+                                }
+                        ) {
+                            Text(
+                                text = country.name ?: "",
+                                style = MaterialTheme.typography.h6,
+                                modifier = Modifier.padding(
+                                    start = 16.dp,
+                                    end = 16.dp,
+                                    top = 8.dp,
+                                    bottom = 8.dp
+                                )
+                            )
                         }
-                ) {
-                    Text(
-                        text = country.name ?: "",
-                        style = MaterialTheme.typography.h6,
-                        modifier = Modifier.padding(
-                            start = 16.dp,
-                            end = 16.dp,
-                            top = 8.dp,
-                            bottom = 8.dp
-                        )
-                    )
+                    }
                 }
+                ConnectivityMessageView(state.showError)
             }
+
         }
+
     }
 }
