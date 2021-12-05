@@ -15,7 +15,8 @@ class CountryDbMapper : EntityMapper<CountryDbEntity, Country> {
             entity.alpha3Code,
             entity.altSpellings ?: listOf(),
             entity.callingCodes ?: listOf(),
-            entity.topLevelDomain ?: listOf()
+            entity.topLevelDomain ?: listOf(),
+            isFav = entity.isFav > 0
         )
     }
 

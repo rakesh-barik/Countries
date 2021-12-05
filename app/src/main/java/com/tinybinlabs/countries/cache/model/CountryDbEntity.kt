@@ -14,6 +14,6 @@ class CountryDbEntity(
     val alpha3Code: String?,
     val altSpellings: List<String>,
     val callingCodes: List<String>,
-    val topLevelDomain: List<String>
-) {
-}
+    val topLevelDomain: List<String>,
+    val isFav: Int = 0
+)

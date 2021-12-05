@@ -15,5 +15,6 @@ data class Country(
     val alpha3Code: String?,
     val altSpellings: List<String>,
     val callingCodes: List<String>,
-    val topLevelDomain: List<String>
+    val topLevelDomain: List<String>,
+    val isFav: Boolean = false
 ) : Parcelable

@@ -7,6 +7,7 @@ import com.tinybinlabs.countries.CountriesApplication
 import com.tinybinlabs.countries.cache.CountryDao
 import com.tinybinlabs.countries.cache.CountryDatabase
 import com.tinybinlabs.countries.cache.util.CountryDbMapper
+import com.tinybinlabs.countries.presentation.util.InternetConManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,6 +25,12 @@ object AppModule {
         return app as CountriesApplication
     }
 
+    @Singleton
+    @Provides
+    fun provideInternetConManager(@ApplicationContext app: Context): InternetConManager {
+        return InternetConManager(app = app as CountriesApplication)
+    }
+
     @Provides
     @Singleton
     fun provideCountryDatabase(app: Application): CountryDatabase {
@@ -31,7 +38,7 @@ object AppModule {
             app,
             CountryDatabase::class.java,
             CountryDatabase.DATABASE_NAME
-        ).build()
+        ).addMigrations(CountryDatabase.MIGRATION_1_2).build()
     }
 
     @Singleton

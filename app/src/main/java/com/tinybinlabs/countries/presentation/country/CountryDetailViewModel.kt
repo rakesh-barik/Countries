@@ -1,5 +1,6 @@
 package com.tinybinlabs.countries.presentation.country
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -33,6 +34,26 @@ constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun toggleFavorite(isFav: Boolean) {
+        Log.d("CountryDetailViewModel", "in toggleFav: $isFav")
+        _state.value = state.value.copy(
+            isFav = isFav
+        )
+        viewModelScope.launch {
+            val country = _state.value.country
+            country?.id?.let {
+                repository.toggleFavorite(it, isFav)
+                repository.getCountryById(it)?.also { country ->
+                    _state.value = state.value.copy(
+                        country = country,
+                        loading = false
+                    )
+                }
+            }
+
         }
     }
 }
