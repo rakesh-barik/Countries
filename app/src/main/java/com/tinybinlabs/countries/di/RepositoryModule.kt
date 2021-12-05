@@ -10,6 +10,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -22,8 +23,9 @@ object RepositoryModule {
         countryService: CountryService,
         mapper: CountryNetworkMapper,
         countryDao: CountryDao,
-        dbMapper: CountryDbMapper
+        dbMapper: CountryDbMapper,
+        @Named("access_key") token: String
     ): CountryRepository {
-        return CountryRepositoryImpl(countryService, mapper, countryDao, dbMapper)
+        return CountryRepositoryImpl(countryService, mapper, countryDao, dbMapper, token)
     }
 }
