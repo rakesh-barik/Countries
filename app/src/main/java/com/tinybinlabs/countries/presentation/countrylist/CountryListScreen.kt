@@ -1,76 +1,47 @@
 package com.tinybinlabs.countries.presentation.countrylist
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import com.tinybinlabs.countries.domain.Country
-import com.tinybinlabs.countries.presentation.Screen
-import com.tinybinlabs.countries.presentation.components.ConnectivityMessageView
-import com.tinybinlabs.countries.presentation.components.LoadingIndicator
+import com.tinybinlabs.countries.presentation.components.MainAppBar
 
 @Composable
 fun CountryListScreen(
-    navController: NavController,
-    viewModel: CountryListViewModel = hiltViewModel()
+    viewModel: CountryListViewModel = hiltViewModel(),
+    isNetworkAvailable: Boolean,
+    onNavigateToDetailScreen: (String) -> Unit
 ) {
     val state = viewModel.state.value
+    val searchWidgetState = viewModel.searchBarState.value
+    val searchTextState = viewModel.searchTextState.value
+
     val scaffoldState = rememberScaffoldState()
+
 
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            TopAppBar(
-                title = {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentWidth(align = Alignment.CenterHorizontally)
-                    ) {
-                        Text(text = "Countries")
-                    }
-                },
-                backgroundColor = MaterialTheme.colors.primary
-            )
+            MainAppBar(
+                searchBarState = searchWidgetState,
+                searchTextState = searchTextState,
+                onTextChange = { viewModel.updateSearchTextState(it) },
+                onCloseClicked = { viewModel.updateSearchWidgetState(SearchBarState.CLOSED) },
+                onSearchClicked = { viewModel.updateSearchWidgetState(SearchBarState.OPEN) },
+                onTriggerSearch = { viewModel.onTriggerEvent(CountryListEvent.SearchEvent(it)) },
+                onTriggerRefresh = { viewModel.onTriggerEvent(CountryListEvent.RefreshListEvent) }) {
+            }
         },
 
         ) {
-        Box(modifier = Modifier.fillMaxSize()){
-            Column(modifier = Modifier.fillMaxSize()) {
-                LoadingIndicator(state.loading)
-                LazyColumn(modifier = Modifier.weight(1f)) {
-                    items(state.countries) { country: Country ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    navController.navigate(Screen.DetailScreen.route + "?countryId=${country.id}")
-                                }
-                        ) {
-                            Text(
-                                text = country.name ?: "",
-                                style = MaterialTheme.typography.h6,
-                                modifier = Modifier.padding(
-                                    start = 16.dp,
-                                    end = 16.dp,
-                                    top = 8.dp,
-                                    bottom = 8.dp
-                                )
-                            )
-                        }
-                    }
-                }
-                ConnectivityMessageView(state.showError)
-            }
 
-        }
+        CountryList(
+            loading = state.loading,
+            countries = state.countries,
+            messagePair = Pair(!isNetworkAvailable,"No Connection"),
+            onNavigateToDetailScreen = onNavigateToDetailScreen
+        )
 
     }
+
 }
