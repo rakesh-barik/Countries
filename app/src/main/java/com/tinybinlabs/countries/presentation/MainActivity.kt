@@ -12,13 +12,30 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.tinybinlabs.countries.presentation.country.CountryDetailScreen
 import com.tinybinlabs.countries.presentation.countrylist.CountryListScreen
+import com.tinybinlabs.countries.presentation.util.InternetConManager
 import com.tinybinlabs.countries.ui.theme.CountriesTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var connectionManager: InternetConManager
+
+    override fun onStart() {
+        super.onStart()
+        connectionManager.registerConnectionObserver(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        connectionManager.unregisterConnectionObserver(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             CountriesTheme {
                 // A surface container using the 'background' color from the theme
@@ -29,7 +46,10 @@ class MainActivity : ComponentActivity() {
                         startDestination = Screen.ListScreen.route
                     ) {
                         composable(route = Screen.ListScreen.route) {
-                            CountryListScreen(navController = navController)
+                            CountryListScreen(
+                                isNetworkAvailable = connectionManager.isNetAvailable.value,
+                                onNavigateToDetailScreen = navController::navigate
+                            )
                         }
                         composable(
                             route = Screen.DetailScreen.route +
