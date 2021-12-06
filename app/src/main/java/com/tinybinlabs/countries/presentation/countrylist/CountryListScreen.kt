@@ -4,6 +4,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.tinybinlabs.countries.presentation.Screen
 import com.tinybinlabs.countries.presentation.components.MainAppBar
 
 @Composable
@@ -29,8 +30,12 @@ fun CountryListScreen(
                 onCloseClicked = { viewModel.updateSearchWidgetState(SearchBarState.CLOSED) },
                 onSearchClicked = { viewModel.updateSearchWidgetState(SearchBarState.OPEN) },
                 onTriggerSearch = { viewModel.onTriggerEvent(CountryListEvent.SearchEvent(it)) },
-                onTriggerRefresh = { viewModel.onTriggerEvent(CountryListEvent.RefreshListEvent) }) {
-            }
+                onTriggerRefresh = { viewModel.onTriggerEvent(CountryListEvent.RefreshListEvent) },
+                onTriggerFavorite = {
+                    val route = Screen.FavListScreen.route
+                    onNavigateToDetailScreen(route)
+                }
+            )
         },
 
         ) {
@@ -38,7 +43,7 @@ fun CountryListScreen(
         CountryList(
             loading = state.loading,
             countries = state.countries,
-            messagePair = Pair(!isNetworkAvailable,"No Connection"),
+            messagePair = Pair(!isNetworkAvailable, "No Connection"),
             onNavigateToDetailScreen = onNavigateToDetailScreen
         )
 

@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.tinybinlabs.countries.presentation.country.CountryDetailScreen
 import com.tinybinlabs.countries.presentation.countrylist.CountryListScreen
+import com.tinybinlabs.countries.presentation.favorites.FavoritesListScreen
 import com.tinybinlabs.countries.presentation.util.InternetConManager
 import com.tinybinlabs.countries.ui.theme.CountriesTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,6 +66,11 @@ class MainActivity : ComponentActivity() {
                             )
                         ) {
                             CountryDetailScreen(navController = navController)
+                        }
+                        composable(route = Screen.FavListScreen.route) {
+                            FavoritesListScreen(
+                                navController = navController,
+                            )
                         }
                     }
                 }
